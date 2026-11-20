@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ selected_category_name or 'All Products' }} - TechMart{% endblock %}
+{% block content %}
+<div class="section-title"><h2>{{ selected_category_name or 'All Products' }}</h2><p>Search or filter by category</p></div>
+
+<form class="filter-bar" method="get" action="{{ url_for('products') }}">
+    <select name="category" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+            <option value="{{ cat.Id }}" {% if selected_category == cat.Id|string %}selected{% endif %}>{{ cat.Name }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="search" placeholder="Search product..." value="{{ search or '' }}">
+    <button class="btn" type="submit">Search</button>
+</form>
+
+{% if products %}
+<div class="product-grid">
+    {% for p in products %}
+    <div class="product-card">
+        <div class="card-image">
+            <img src="{{ p.Image }}" alt="{{ p.Name }}">
+            {% if p.OldPrice %}<span class="discount-badge">SALE</span>{% endif %}
+            <span class="in-stock-badge">In Stock</span>
+        </div>
+        <div class="product-body">
+            <h3>{{ p.Name }}</h3>
+            <p class="desc">{{ p.Description }}</p>
+            <p class="price-row"><span class="price">Rs. {{ p.Price }}</span>
+                {% if p.OldPrice %}<span class="old-price">Rs. {{ p.OldPrice }}</span>{% endif %}
+            </p>
+            <p class="stock">Stock: <strong>{{ p.Stock }} left</strong></p>
+            <a class="btn" href="{{ url_for('product_detail', product_id=p.Id) }}">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No products found. Try another search.</p>
+{% endif %}
+{% endblock %}

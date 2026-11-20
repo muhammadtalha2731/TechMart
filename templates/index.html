@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}TechMart - Home{% endblock %}
+{% block content %}
+<section class="hero">
+    <span class="hero-badge">New Collection 2026</span>
+    <h1>Best Electronics, <span>Honest Prices.</span></h1>
+    <p>Best Mobiles, Laptops, Headphones and Smartwatches. Cash on Delivery, fast delivery and 100% genuine products.</p>
+    <div class="hero-actions">
+        <a class="btn btn-orange" href="{{ url_for('products') }}">Shop Now</a>
+        <a class="btn btn-white" href="{{ url_for('products') }}">View All Products</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-box"><div class="icon">&#128666;</div><h3>Fast Delivery</h3><p>Orders delivered in 2-3 working days.</p></div>
+    <div class="feature-box"><div class="icon">&#128176;</div><h3>Cash on Delivery</h3><p>Pay when your order arrives at your door.</p></div>
+    <div class="feature-box"><div class="icon">&#10003;</div><h3>100% Genuine</h3><p>Original products with warranty.</p></div>
+    <div class="feature-box"><div class="icon">&#8635;</div><h3>Easy Return</h3><p>7-day easy return on all products.</p></div>
+</section>
+
+<section>
+    <div class="section-title"><h2>Shop by Category</h2><p>Pick your favourite category</p></div>
+    <div class="category-list">
+        {% for cat in categories %}
+            <a class="category-chip" href="{{ url_for('products', category=cat.Id) }}">{{ cat.Name }}</a>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <div class="section-title"><h2>Featured Products</h2><p>Top picks this week</p></div>
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+            <div class="card-image">
+                <img src="{{ p.Image }}" alt="{{ p.Name }}">
+                {% if p.OldPrice %}<span class="discount-badge">SALE</span>{% endif %}
+                <span class="in-stock-badge">In Stock</span>
+            </div>
+            <div class="product-body">
+                <h3>{{ p.Name }}</h3>
+                <p class="desc">{{ p.Description }}</p>
+                <p class="price-row"><span class="price">Rs. {{ p.Price }}</span>
+                    {% if p.OldPrice %}<span class="old-price">Rs. {{ p.OldPrice }}</span>{% endif %}
+                </p>
+                <p class="stock">Stock: <strong>{{ p.Stock }} left</strong></p>
+                <a class="btn" href="{{ url_for('product_detail', product_id=p.Id) }}">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

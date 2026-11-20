@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Checkout - TechMart{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+{% if success %}
+    <div class="success-box">
+        <h2>Order Placed Successfully!</h2>
+        <p>Your Order ID is: <strong>{{ order_id }}</strong></p>
+        <p>Payment Method: Cash on Delivery</p>
+        <p><a class="btn" href="{{ url_for('my_orders') }}">View My Orders</a></p>
+    </div>
+{% else %}
+    <table class="table">
+        <tr><th>Product</th><th>Quantity</th><th>Subtotal</th></tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product.Name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>Rs. {{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p class="total">Total: Rs. {{ total }}</p>
+    <p>Payment Method: <strong>Cash on Delivery</strong></p>
+    <form method="post" action="{{ url_for('checkout') }}">
+        <button class="btn" type="submit">Place Order</button>
+    </form>
+{% endif %}
+{% endblock %}

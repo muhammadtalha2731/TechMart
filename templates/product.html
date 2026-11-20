@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ product.Name }} - TechMart{% endblock %}
+{% block content %}
+<div class="detail">
+    <img src="{{ product.Image }}" alt="{{ product.Name }}">
+    <div class="detail-info">
+        <h1>{{ product.Name }}</h1>
+        <p>{{ product.Description }}</p>
+        <p class="price">Rs. {{ product.Price }}
+            {% if product.OldPrice %}<span class="old-price">Rs. {{ product.OldPrice }}</span>{% endif %}
+        </p>
+        <p class="stock">Stock: {{ product.Stock }}</p>
+        {% if product.Stock > 0 %}
+        <form method="post" action="{{ url_for('add_to_cart', product_id=product.Id) }}">
+            <label>Quantity:
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.Stock }}">
+            </label>
+            <button class="btn" type="submit">Add to Cart</button>
+        </form>
+        {% else %}
+        <p><strong>Out of Stock</strong></p>
+        {% endif %}
+        <p><a href="{{ url_for('products') }}">Back to Products</a></p>
+    </div>
+</div>
+{% endblock %}

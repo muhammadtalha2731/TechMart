@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - TechMart{% endblock %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+<p>
+    <a class="btn" href="{{ url_for('admin_products') }}">Manage Products</a>
+    <a class="btn" href="{{ url_for('admin_orders') }}">Manage Orders</a>
+</p>
+<div class="stats">
+    <div class="stat-box"><h3>{{ total_products }}</h3><p>Total Products</p></div>
+    <div class="stat-box"><h3>{{ total_orders }}</h3><p>Total Orders</p></div>
+    <div class="stat-box"><h3>{{ total_users }}</h3><p>Total Users</p></div>
+    <div class="stat-box"><h3>Rs. {{ total_sales }}</h3><p>Total Sales</p></div>
+</div>
+<h2>Recent Orders</h2>
+<table class="table">
+    <tr><th>Order ID</th><th>Total</th><th>Status</th><th>Date</th></tr>
+    {% for o in recent_orders %}
+    <tr><td>{{ o.Id }}</td><td>Rs. {{ o.TotalAmount }}</td><td>{{ o.Status }}</td><td>{{ o.CreatedAt }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

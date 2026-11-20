@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Manage Products - TechMart Admin{% endblock %}
+{% block content %}
+<h1>Manage Products</h1>
+<p><a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a></p>
+
+<h2>Add New Product</h2>
+<form class="form" method="post" action="{{ url_for('admin_products') }}">
+    <label>Name: <input type="text" name="name" required></label>
+    <label>Category:
+        <select name="category_id">
+            {% for cat in categories %}
+            <option value="{{ cat.Id }}">{{ cat.Name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Description: <input type="text" name="description"></label>
+    <label>Price (Rs.): <input type="number" step="0.01" name="price" required></label>
+    <label>Old Price (Rs.): <input type="number" step="0.01" name="old_price"></label>
+    <label>Stock: <input type="number" name="stock" value="0"></label>
+    <label>Image seed (optional): <input type="text" name="image" placeholder="new-product"></label>
+    <button class="btn" type="submit">Add Product</button>
+</form>
+
+<h2>All Products</h2>
+<table class="table">
+    <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr>
+    {% for p in products %}
+    <tr>
+        <td>{{ p.Id }}</td>
+        <td>{{ p.Name }}</td>
+        <td>Rs. {{ p.Price }}</td>
+        <td>{{ p.Stock }}</td>
+        <td><a href="{{ url_for('admin_delete_product', product_id=p.Id) }}" onclick="return confirm('Delete this product?')">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

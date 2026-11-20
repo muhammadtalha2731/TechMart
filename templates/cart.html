@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Your Cart - TechMart{% endblock %}
+{% block content %}
+<h1>Your Cart</h1>
+{% if items %}
+<form method="post" action="{{ url_for('update_cart') }}">
+    <table class="table">
+        <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th>Action</th></tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product.Name }}</td>
+            <td>Rs. {{ item.product.Price }}</td>
+            <td><input type="number" name="qty_{{ item.product.Id }}" value="{{ item.quantity }}" min="0"></td>
+            <td>Rs. {{ item.subtotal }}</td>
+            <td><a href="{{ url_for('remove_from_cart', product_id=item.product.Id) }}">Remove</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p class="total">Total: Rs. {{ total }}</p>
+    <button class="btn" type="submit">Update Cart</button>
+    <a class="btn" href="{{ url_for('checkout') }}">Checkout</a>
+</form>
+{% else %}
+<p>Cart is empty. <a href="{{ url_for('products') }}">Shop products</a></p>
+{% endif %}
+{% endblock %}

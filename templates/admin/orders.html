@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Manage Orders - TechMart Admin{% endblock %}
+{% block content %}
+<h1>Manage Orders</h1>
+<p><a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a></p>
+<table class="table">
+    <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th>Change Status</th></tr>
+    {% for o in orders %}
+    <tr>
+        <td>{{ o.Id }}</td>
+        <td>{{ o.UserName }}</td>
+        <td>Rs. {{ o.TotalAmount }}</td>
+        <td>{{ o.Status }}</td>
+        <td>{{ o.PaymentMethod }}</td>
+        <td>{{ o.CreatedAt }}</td>
+        <td>
+            <form method="post" action="{{ url_for('admin_update_order', order_id=o.Id) }}">
+                <select name="status">
+                    <option value="Pending" {% if o.Status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Delivered" {% if o.Status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                    <option value="Cancelled" {% if o.Status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+                <button class="btn" type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
