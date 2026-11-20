@@ -74,3 +74,17 @@ techmart_flask/
 ## Features
 - Customer: Home, Products, Search, Category Filter, Product Detail, Cart, Checkout (Cash on Delivery), Login/Register, My Orders
 - Admin: Dashboard (total products, orders, users, sales), Product Add/Delete, Orders Status Change (Pending to Delivered)
+
+## Live Deploy (Render + Azure SQL)
+The laptop run uses `localhost\SQLEXPRESS` with Windows Authentication.
+For the live site, the database settings come from environment variables
+(see `config.py`): `DB_SERVER`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
+1. Create an Azure SQL Database and run `techmart_sqlserver.sql` on it
+   (in the Azure Query Editor or from SSMS), then create the admin with
+   `python create_admin.py` after setting the same variables locally.
+2. On Render, create a Web Service from this GitHub repo (Docker deploy,
+   `Dockerfile` is included) and set these environment variables:
+   `DB_SERVER`, `DB_NAME=TechMartDB`, `DB_USER`, `DB_PASSWORD`,
+   `SECRET_KEY` (a long random string), `FLASK_DEBUG=false`.
+3. Open the live URL Render gives you and test register, login, cart and
+   checkout there.

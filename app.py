@@ -3,14 +3,17 @@
 # How to run:  python app.py
 # Then open in your browser:  http://127.0.0.1:5000
 
+import os
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import get_connection
 
 app = Flask(__name__)
-# Secret key for sessions. Change this in your project.
-app.secret_key = "techmart-secret-key-change-this"
+# Secret key for sessions. On the live server it comes from the
+# SECRET_KEY environment variable; locally the default below is used.
+app.secret_key = os.environ.get("SECRET_KEY", "techmart-secret-key-change-this")
 
 
 @app.context_processor
@@ -466,4 +469,8 @@ def admin_update_order(order_id):
 
 if __name__ == "__main__":
     # debug=True means: the server restarts automatically when code changes.
-    app.run(debug=True)
+    # On the laptop it stays on; on the live server set FLASK_DEBUG=false.
+    # PORT is set by the hosting site (Render); locally it is 5000.
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "true").lower() == "true"
+    app.run(host="0.0.0.0", port=port, debug=debug)

@@ -1,0 +1,17 @@
+# TechMart on Render - one-click Blueprint (Docker deploy, free plan)
+services:
+  - type: web
+    name: techmart
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: DB_NAME
+        value: TechMartDB
+      # Set these three in the Render dashboard (never write passwords here):
+      # DB_SERVER   - e.g. techmart-server.database.windows.net
+      # DB_USER     - e.g. techmart_admin
+      # DB_PASSWORD - the Azure SQL login password
+      # SECRET_KEY  - a long random string for Flask sessions
