@@ -40,7 +40,11 @@ Run in the terminal:
 ```
 python create_admin.py
 ```
-This creates the admin@techmart.com / admin123 account (the password is saved as a hash).
+It will ask you to type a password for the admin account (the password
+is saved as a hash, never in plain text). You can also set it with the
+`ADMIN_PASSWORD` environment variable before running the script.
+If the admin already exists, running the script again updates
+its password and role.
 If the admin already exists, you can also change its role in SSMS:
 ```sql
 UPDATE Users SET Role = 'admin' WHERE Email = 'admin@techmart.com';
@@ -53,7 +57,7 @@ python app.py
 ```
 Then open in your browser: **http://127.0.0.1:5000**
 
-Admin login: admin@techmart.com / admin123
+Admin login: admin@techmart.com (use the password you set when you ran create_admin.py)
 
 ## Folder Structure
 ```
@@ -74,6 +78,30 @@ techmart_flask/
 ## Features
 - Customer: Home, Products, Search, Category Filter, Product Detail, Cart, Checkout (Cash on Delivery), Login/Register, My Orders
 - Admin: Dashboard (total products, orders, users, sales), Product Add/Delete, Orders Status Change (Pending to Delivered)
+
+## Live Deploy (Koyeb + Neon Postgres, no card)
+The Render + Azure SQL path above needs a credit card for the Azure free
+account, so there is a second live path that needs no card at all.
+The laptop run is unchanged: it still uses SQL Server on
+`localhost\SQLEXPRESS`. Only the live site uses Postgres.
+1. Create a free Neon project (neon.tech, sign up with GitHub, no card).
+   In the Neon dashboard, copy the connection details: host, database,
+   user and password.
+2. In the Neon SQL Editor, paste the whole `techmart_postgres.sql` file
+   and press Run. It creates the tables and the same 60 products.
+   Verify: `SELECT COUNT(*) FROM Products;` should show 60.
+3. On Koyeb (koyeb.com, sign up with GitHub, no card), create a Web
+   Service from this GitHub repo. Use `Dockerfile.postgres` as the
+   Dockerfile and set these environment variables:
+   `DB_TYPE=postgres`, `DB_SERVER` (Neon host), `DB_NAME` (Neon database),
+   `DB_USER`, `DB_PASSWORD`, `SECRET_KEY` (a long random string),
+   `FLASK_DEBUG=false`.
+4. Create the admin account: on your laptop, set the same five database
+   variables in the terminal, then run `python create_admin.py`.
+   (Or register on the live site and change the role in the Neon SQL
+   Editor: `UPDATE Users SET Role = 'admin' WHERE Email = 'admin@techmart.com';`)
+5. Open the live URL Koyeb gives you and test register, login, cart and
+   checkout there.
 
 ## Live Deploy (Render + Azure SQL)
 The laptop run uses `localhost\SQLEXPRESS` with Windows Authentication.
